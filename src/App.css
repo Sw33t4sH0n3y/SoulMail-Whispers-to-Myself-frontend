@@ -1,42 +1,94 @@
-#root {
-  max-width: 1280px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: white;
+  color: black;
+  padding: 40px;
+}
+
+/* Main page container */
+.page-container {
+  border: 2px solid black;
+  border-radius: 35px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 40px;
+}
+
+/* Logo */
+.logo-box {
+  background: black;
+  color: white;
+  padding: 20px 40px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Form box */
+.form-box {
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 400px;
+  margin: 0 auto;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px 0;
+  font-weight: bold;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+  margin-bottom: 15px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button {
+  background: black;
+  color: white;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 12px 24px;
+  margin: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-.card {
-  padding: 2em;
+button:hover {
+  background: white;
+  color: black;
 }
 
-.read-the-docs {
-  color: #888;
+/* Sign up link */
+.signup-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: black;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signup-link a:hover {
+  font-weight: bold;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }

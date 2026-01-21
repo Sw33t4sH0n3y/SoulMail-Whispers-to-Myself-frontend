@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Routes, Route } from 'react-router';
+import './App.css';
 
 import NavBar from './components/NavBar/NavBar';
 import SignUpForm from './components/SignUpForm/SignUpForm';
@@ -11,12 +12,10 @@ import Dashboard from './components/Dashboard/Dashboard';
 import { UserContext } from './contexts/UserContext';
 
 const App = () => {
-  // Get the user
   const { user } = useContext(UserContext);
 
   return (
     <>
-      <NavBar />
       <Routes>
         <Route path='/' element={user ? <Dashboard /> : <Landing /> } />        
         <Route path='/sign-up' element={<SignUpForm />} />
