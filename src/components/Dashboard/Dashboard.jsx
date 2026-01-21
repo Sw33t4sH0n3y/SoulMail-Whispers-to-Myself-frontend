@@ -37,7 +37,7 @@ const Dashboard = () => {
       <h1>SoulMail: Whispers to Myself</h1>
       <p>Leave yourself a whisper</p>
 
-      <h2>Elevated Salutaions, {user.name}</h2>
+      <h2>Elevated Salutaions, {user.username}</h2>
       <nav>
         <Link to='/'>Home</Link>
         <Link to='/' onClick={() => {
