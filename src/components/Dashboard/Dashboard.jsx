@@ -24,12 +24,11 @@ const Dashboard = () => {
   }, [user]);
 
   const handleDelete = async (letterId) => {
-    try {
     const confirmDelete = window.confirm('Are you sure you are ready to allow this one to rest?');
 
     if (!confirmDelete) return;
 
-    try{
+    try {
       await letterService.deleteLetter(letterId);
       setLetters(letters.filter((letter) => letter._id !== letterId));
     } catch (err) {
@@ -50,9 +49,10 @@ const Dashboard = () => {
 
       <div className="dashboard-wrapper">
         <div className="dashboard-greeting">
-          Elevated Salutations, {user?.username}
+          Elevated Salutations, {user?.name}
         </div>
         <p className="dashboard-tagline">Leave yourself a whisper</p>
+      <Link to='/letters/new'>Sire your new whisper</Link>
 
         <div className="dashboard-content">
           {/* Waiting to be Opened Section */}
@@ -63,20 +63,8 @@ const Dashboard = () => {
             >
               <h3>Waiting to be Opened ({waitingLetters.length})</h3>
               <span className="toggle-icon">{showWaiting ? '▼' : '▶'}</span>
-      <Link to='/letters/new'>Sire your new whisper</Link>
-      <section>
-        <h3>Waiting to be Opened ({waitingLetters.length})</h3>
-        {waitingLetters.length === 0 ? (
-          <p>No Letters</p>
-        ) : (
-          waitingLetters.map((letter) => (
-            <div key = {letter._id}>
-              <span>{letter.title}</span>
-              <span> Delivery Date: {new Date(letter.deliverAt).toLocaleDateString()}</span>
-              <Link to={`/letters/${letter._id}/edit`}>Edit Date</Link>
-              <button onClick={() => handleDelete(letter._id)}>Delete</button>
-            </div>
-            
+             </div>
+
             {showWaiting && (
               <div className="section-content">
                 {waitingLetters.length === 0 ? (
@@ -128,7 +116,7 @@ const Dashboard = () => {
                       <div className="letter-info">
                         <span className="letter-title">{letter.title}</span>
                         <span className="letter-date">
-                          Delivered: {new Date(letter.deliveredAt).toLocaleDateString()}
+                          Delivered: {new Date(letter.deliverAt).toLocaleDateString()}
                         </span>
                       </div>
                       <div className="letter-actions">
@@ -151,22 +139,6 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-      <section>
-        <h3>Opened ({openedLetters.length})</h3>
-        {openedLetters.length === 0 ? (
-          <p> No opened letters yet.</p>
-        ) : (
-          openedLetters.map((letter) => (
-           <div key={letter._id}>
-              <span>{letter.title}</span>
-              <span> Delivered: {new Date(letter.deliverAt).toLocaleDateString()}</span>
-              <Link to={`/letters/${letter._id}/edit`}>View</Link>
-              <button onClick={() => handleDelete(letter._id)}>Delete</button>
-           </div> 
-          ))
-        )}
-      </section>
-    </main>
   );
 };
 
