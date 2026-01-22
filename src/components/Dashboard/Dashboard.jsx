@@ -24,12 +24,11 @@ const Dashboard = () => {
   }, [user]);
 
   const handleDelete = async (letterId) => {
-    try {
     const confirmDelete = window.confirm('Are you sure you are ready to allow this one to rest?');
 
     if (!confirmDelete) return;
 
-    try{
+    try {
       await letterService.deleteLetter(letterId);
       setLetters(letters.filter((letter) => letter._id !== letterId));
     } catch (err) {
@@ -54,29 +53,19 @@ const Dashboard = () => {
         </div>
         <p className="dashboard-tagline">Leave yourself a whisper</p>
 
+        <Link to='/letters/new' className="new-letter-link">Sire your new whisper</Link>
+
         <div className="dashboard-content">
           {/* Waiting to be Opened Section */}
           <div className="dashboard-section">
-            <div 
+            <div
               className="section-header"
               onClick={() => setShowWaiting(!showWaiting)}
             >
               <h3>Waiting to be Opened ({waitingLetters.length})</h3>
               <span className="toggle-icon">{showWaiting ? '▼' : '▶'}</span>
-      <Link to='/letters/new'>Sire your new whisper</Link>
-      <section>
-        <h3>Waiting to be Opened ({waitingLetters.length})</h3>
-        {waitingLetters.length === 0 ? (
-          <p>No Letters</p>
-        ) : (
-          waitingLetters.map((letter) => (
-            <div key = {letter._id}>
-              <span>{letter.title}</span>
-              <span> Delivery Date: {new Date(letter.deliverAt).toLocaleDateString()}</span>
-              <Link to={`/letters/${letter._id}/edit`}>Edit Date</Link>
-              <button onClick={() => handleDelete(letter._id)}>Delete</button>
             </div>
-            
+
             {showWaiting && (
               <div className="section-content">
                 {waitingLetters.length === 0 ? (
@@ -94,7 +83,7 @@ const Dashboard = () => {
                         <Link to={`/letters/${letter._id}/edit`} className="edit-link">
                           Edit Date
                         </Link>
-                        <button 
+                        <button
                           onClick={() => handleDelete(letter._id)}
                           className="delete-btn"
                         >
@@ -110,14 +99,14 @@ const Dashboard = () => {
 
           {/* Already Opened Section */}
           <div className="dashboard-section">
-            <div 
+            <div
               className="section-header"
               onClick={() => setShowOpened(!showOpened)}
             >
               <h3>Already Opened ({openedLetters.length})</h3>
               <span className="toggle-icon">{showOpened ? '▼' : '▶'}</span>
             </div>
-            
+
             {showOpened && (
               <div className="section-content">
                 {openedLetters.length === 0 ? (
@@ -135,7 +124,7 @@ const Dashboard = () => {
                         <Link to={`/letters/${letter._id}`} className="view-link">
                           View
                         </Link>
-                        <button 
+                        <button
                           onClick={() => handleDelete(letter._id)}
                           className="delete-btn"
                         >
@@ -151,22 +140,6 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-      <section>
-        <h3>Opened ({openedLetters.length})</h3>
-        {openedLetters.length === 0 ? (
-          <p> No opened letters yet.</p>
-        ) : (
-          openedLetters.map((letter) => (
-           <div key={letter._id}>
-              <span>{letter.title}</span>
-              <span> Delivered: {new Date(letter.deliverAt).toLocaleDateString()}</span>
-              <Link to={`/letters/${letter._id}/edit`}>View</Link>
-              <button onClick={() => handleDelete(letter._id)}>Delete</button>
-           </div> 
-          ))
-        )}
-      </section>
-    </main>
   );
 };
 
