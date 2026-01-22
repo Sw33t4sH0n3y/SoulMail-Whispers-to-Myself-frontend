@@ -57,7 +57,7 @@ const addReflection = async (letterId, reflectionData) => {
         headers: getAuthHeaders(),
         body: JSON.stringify(reflectionData)
     });
-    return res.json();
+    return res.json();  
 };
 
 // DELETE /letters/:id/reflection/reflectionId

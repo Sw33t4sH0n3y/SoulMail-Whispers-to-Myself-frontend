@@ -1,26 +1,30 @@
 import { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router';
 import { UserContext } from '../../contexts/UserContext';
+import NavBar from '../NavBar/NavBar';
 
 import * as letterService from '../../services/letterService';
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const [letters, setLetters] = useState([]);
+  const [showWaiting, setShowWaiting] = useState(true);
+  const [showOpened, setShowOpened] = useState(true);
 
   useEffect(() => {
     const fetchLetters = async () => {
       try {
         const fetchedLetters = await letterService.index();
-        setLetters(fetchedLetters);
+        setLetters(fetchedLetters.data || []);
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
+    };
     if (user) fetchLetters();
   }, [user]);
 
   const handleDelete = async (letterId) => {
+    try {
     const confirmDelete = window.confirm('Are you sure you are ready to allow this one to rest?');
 
     if (!confirmDelete) return;
@@ -32,24 +36,33 @@ const Dashboard = () => {
       console.log(err);
     }
   };
+
   // Filter letters
   const waitingLetters = letters.filter((letter) => !letter.isDelivered);
   const openedLetters = letters.filter((letter) => letter.isDelivered);
 
   return (
-    <main>
-      <h1>SoulMail: Whispers to Myself</h1>
-      <p>Leave yourself a whisper</p>
+    <div className="page-container">
+      <div className="header">
+        <img src="/images/logo.png" alt="SoulMail Logo" className="logo-image" />
+        <NavBar />
+      </div>
 
-      <h2>Elevated Salutaions, {user.username}</h2>
-      <nav>
-        <Link to='/'>Home</Link>
-        <Link to='/' onClick={() => {
-          localStorage.removeItem('token');
-          window.location.reload();
-        }}>Sign Out</Link>
-      </nav>
+      <div className="dashboard-wrapper">
+        <div className="dashboard-greeting">
+          Elevated Salutations, {user?.username}
+        </div>
+        <p className="dashboard-tagline">Leave yourself a whisper</p>
 
+        <div className="dashboard-content">
+          {/* Waiting to be Opened Section */}
+          <div className="dashboard-section">
+            <div 
+              className="section-header"
+              onClick={() => setShowWaiting(!showWaiting)}
+            >
+              <h3>Waiting to be Opened ({waitingLetters.length})</h3>
+              <span className="toggle-icon">{showWaiting ? '▼' : '▶'}</span>
       <Link to='/letters/new'>Sire your new whisper</Link>
       <section>
         <h3>Waiting to be Opened ({waitingLetters.length})</h3>
@@ -63,10 +76,81 @@ const Dashboard = () => {
               <Link to={`/letters/${letter._id}/edit`}>Edit Date</Link>
               <button onClick={() => handleDelete(letter._id)}>Delete</button>
             </div>
-          ))
-        )}
-      </section>
+            
+            {showWaiting && (
+              <div className="section-content">
+                {waitingLetters.length === 0 ? (
+                  <p className="no-letters">No letters waiting</p>
+                ) : (
+                  waitingLetters.map((letter) => (
+                    <div key={letter._id} className="letter-card">
+                      <div className="letter-info">
+                        <span className="letter-title">{letter.title}</span>
+                        <span className="letter-date">
+                          Delivery Date: {new Date(letter.deliverAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="letter-actions">
+                        <Link to={`/letters/${letter._id}/edit`} className="edit-link">
+                          Edit Date
+                        </Link>
+                        <button 
+                          onClick={() => handleDelete(letter._id)}
+                          className="delete-btn"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
 
+          {/* Already Opened Section */}
+          <div className="dashboard-section">
+            <div 
+              className="section-header"
+              onClick={() => setShowOpened(!showOpened)}
+            >
+              <h3>Already Opened ({openedLetters.length})</h3>
+              <span className="toggle-icon">{showOpened ? '▼' : '▶'}</span>
+            </div>
+            
+            {showOpened && (
+              <div className="section-content">
+                {openedLetters.length === 0 ? (
+                  <p className="no-letters">No opened letters yet</p>
+                ) : (
+                  openedLetters.map((letter) => (
+                    <div key={letter._id} className="letter-card">
+                      <div className="letter-info">
+                        <span className="letter-title">{letter.title}</span>
+                        <span className="letter-date">
+                          Delivered: {new Date(letter.deliveredAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="letter-actions">
+                        <Link to={`/letters/${letter._id}`} className="view-link">
+                          View
+                        </Link>
+                        <button 
+                          onClick={() => handleDelete(letter._id)}
+                          className="delete-btn"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
       <section>
         <h3>Opened ({openedLetters.length})</h3>
         {openedLetters.length === 0 ? (
