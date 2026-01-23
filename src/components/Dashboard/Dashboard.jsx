@@ -2,7 +2,6 @@ import { useEffect, useContext, useState } from 'react';
 import { Link } from 'react-router';
 import { UserContext } from '../../contexts/UserContext';
 import NavBar from '../NavBar/NavBar';
-
 import * as letterService from '../../services/letterService';
 
 const Dashboard = () => {
@@ -15,7 +14,7 @@ const Dashboard = () => {
     const fetchLetters = async () => {
       try {
         const fetchedLetters = await letterService.index();
-        setLetters(fetchedLetters.data || []);
+        setLetters(fetchedLetters || []);
       } catch (err) {
         console.log(err);
       }
@@ -25,7 +24,6 @@ const Dashboard = () => {
 
   const handleDelete = async (letterId) => {
     const confirmDelete = window.confirm('Are you sure you are ready to allow this one to rest?');
-
     if (!confirmDelete) return;
 
     try {
@@ -36,7 +34,6 @@ const Dashboard = () => {
     }
   };
 
-  // Filter letters
   const waitingLetters = letters.filter((letter) => !letter.isDelivered);
   const openedLetters = letters.filter((letter) => letter.isDelivered);
 
@@ -53,15 +50,9 @@ const Dashboard = () => {
         </div>
         <p className="dashboard-tagline">Leave yourself a whisper</p>
 
-        <Link to='/letters/new' className="new-letter-link">Sire your new whisper</Link>
-
         <div className="dashboard-content">
-          {/* Waiting to be Opened Section */}
           <div className="dashboard-section">
-            <div
-              className="section-header"
-              onClick={() => setShowWaiting(!showWaiting)}
-            >
+            <div className="section-header" onClick={() => setShowWaiting(!showWaiting)}>
               <h3>Waiting to be Opened ({waitingLetters.length})</h3>
               <span className="toggle-icon">{showWaiting ? '▼' : '▶'}</span>
             </div>
@@ -76,17 +67,14 @@ const Dashboard = () => {
                       <div className="letter-info">
                         <span className="letter-title">{letter.title}</span>
                         <span className="letter-date">
-                          Delivery Date: {new Date(letter.deliverAt).toLocaleDateString()}
+                          Delivery Date: {new Date(letter.deliveredAt).toLocaleDateString()}
                         </span>
                       </div>
                       <div className="letter-actions">
-                        <Link to={`/letters/${letter._id}/edit`} className="edit-link">
+                        <Link to={`/letters/${letter._id}/edit`} className="action-btn">
                           Edit Date
                         </Link>
-                        <button
-                          onClick={() => handleDelete(letter._id)}
-                          className="delete-btn"
-                        >
+                        <button onClick={() => handleDelete(letter._id)} className="action-btn delete-btn">
                           Delete
                         </button>
                       </div>
@@ -97,12 +85,8 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Already Opened Section */}
           <div className="dashboard-section">
-            <div
-              className="section-header"
-              onClick={() => setShowOpened(!showOpened)}
-            >
+            <div className="section-header" onClick={() => setShowOpened(!showOpened)}>
               <h3>Already Opened ({openedLetters.length})</h3>
               <span className="toggle-icon">{showOpened ? '▼' : '▶'}</span>
             </div>
@@ -121,13 +105,10 @@ const Dashboard = () => {
                         </span>
                       </div>
                       <div className="letter-actions">
-                        <Link to={`/letters/${letter._id}`} className="view-link">
+                        <Link to={`/letters/${letter._id}`} className="action-btn">
                           View
                         </Link>
-                        <button
-                          onClick={() => handleDelete(letter._id)}
-                          className="delete-btn"
-                        >
+                        <button onClick={() => handleDelete(letter._id)} className="action-btn delete-btn">
                           Delete
                         </button>
                       </div>

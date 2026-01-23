@@ -10,7 +10,11 @@ const index = async () => {
     const res = await fetch(BASE_URL, {
         headers: getAuthHeaders()
     });
-    return res.json();
+    const result = await res.json();
+    if (!result.success) {
+        throw new Error(result.error || 'Failed to fetch letters');
+    }
+    return result.data;
 };
 
 // GET /letters/:id
