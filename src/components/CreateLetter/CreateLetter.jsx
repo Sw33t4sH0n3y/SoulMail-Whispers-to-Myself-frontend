@@ -6,6 +6,10 @@ import * as letterService from '../../services/letterService';
 const CreateLetter = () => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const today = new Date().toISOString().split('T')[0];
+
     const [formData, setFormData] = useState({
         title: '',
         content: '',
@@ -22,6 +26,27 @@ const CreateLetter = () => {
         goals: []
     });
     const [goalInput, setGoalInput] = useState('');
+
+    const deliveryIntervals = [
+        { value: '1week', label: '1 Week' },
+        { value: '1month', label: '1 month' },
+        { value: '6months', label: '6 months'},
+        { value: '1 year', label: '1 Year'},
+        { value: '5years', label: '5 Years'},
+        { value: 'custom', label: 'Custom'}
+    ];
+
+        const moods = [
+        { value: '☺️', label: 'Happy' },
+        { value: '😢', label: 'Sad' },
+        { value: '🤬', label: 'Angry' },
+        { value: '😰', label: 'Anxious' },
+        { value: '🤩', label: 'Excited' },
+        { value: '🙏', label: 'Grateful' },
+        { value: '😩', label: 'Stressed'}
+    ];
+
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setErrorMessage('');
@@ -47,14 +72,6 @@ const handleSubmit = async (e) => {
     console.error(err);
   }
 };
-    const moods = [
-        { value: 'happy', emoji: ':blush:', label: 'Happy' },
-        { value: 'sad', emoji: ':cry:', label: 'Sad' },
-        { value: 'angry', emoji: ':angry:', label: 'Angry' },
-        { value: 'anxious', emoji: ':cold_sweat:', label: 'Anxious' },
-        { value: 'excited', emoji: ':star-struck:', label: 'Excited' },
-        { value: 'calm', emoji: ':relieved:', label: 'Calm' }
-    ];
   return (
   <div className="page-container">
     <div className="header">
@@ -62,7 +79,7 @@ const handleSubmit = async (e) => {
       <NavBar />
     </div>
             <div className="create-letter-wrapper">
-                <div className="welcome">This page belongs to you, {user?.username}</div>
+                <div className="welcome">This page belongs to you, {user?.name}</div>
                 <div className="form-inner-box">
                     <h2 className="form-title">Create a Letter</h2>
                     <p className="required-note">* Required fields</p>
