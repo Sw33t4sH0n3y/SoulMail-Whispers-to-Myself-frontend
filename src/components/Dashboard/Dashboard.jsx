@@ -21,7 +21,7 @@ const Dashboard = () => {
   }, [user]);
 
   const handleDelete = async (letterId) => {
-    const confirmDelete = window.confirm('Are you sure you are ready to allow this one to rest?');
+    const confirmDelete = window.confirm('Are you sure you are ready to allow this letter to rest?');
 
     if (!confirmDelete) return;
 
