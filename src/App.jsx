@@ -9,7 +9,7 @@ import SignInForm from './components/SignInForm/SignInForm';
 import Landing from './components/Landing/Landing';
 import Dashboard from './components/Dashboard/Dashboard';
 import CreateLetter from './components/CreateLetter/CreateLetter';
-import EditLetter from './components/EditLetter/EditLetter';
+import LetterEdit from './components/LetterEdit/LetterEdit';
 import LetterDetails from './components/LetterDetails/LetterDetails';
 import ReflectionPage from './components/ReflectionPage/ReflectionPage';
 
@@ -21,7 +21,6 @@ const App = () => {
 
   return (
     <>
-    <NavBar />
       <Routes>
         
         <Route path='/' element={user ? <Dashboard /> : <Landing /> } />
@@ -30,7 +29,7 @@ const App = () => {
         
         {/* 2. Protected Routes */}
         <Route path="/letters/new" element={user ? <CreateLetter /> : <Landing />} />
-        <Route path="/letters/:id/edit" element={user ? <EditLetter /> : <Landing />} />
+        <Route path="/letters/:id/edit" element={user ? <LetterEdit /> : <Landing />} />
         <Route path="/letters/:id" element={user ? <LetterDetails /> : <Landing />} />
         
         <Route path="/letters/:id/reflection" element={user ? <ReflectionPage /> : <Landing />} />
