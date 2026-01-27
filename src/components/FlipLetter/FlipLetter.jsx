@@ -16,7 +16,7 @@ const FlipLetter = ({ front, back }) => {
         setIsFlipped(!isFlipped);
     };
     const handleCornerClick = (e) => {
-        e.stopPropegtion();
+        e.stopPropagtion();
         handleFlip();
     };
     // Touch handlers for swipe
@@ -57,8 +57,10 @@ const FlipLetter = ({ front, back }) => {
            >
             <div className={`flip-card ${isFlipped ? 'flipped' : ''}`}>
                 {/* front Side */}
-            <div className='flip-card-front'>{front}</div>
+            <div className='flip-card-front'>
+                {front}
                 {/* Corner Curl */}
+ 
             <div className={`page-corner ${isHovering ? 'hover' : ''}`}
                  onMouseEnter={() => setIsHovering(true)}
                  onMouseLeave={() => setIsHovering(false)}
@@ -80,11 +82,21 @@ const FlipLetter = ({ front, back }) => {
             <div className={`page-corner ${isHovering ? 'hover' : ''}`}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            onClick={{handleCornerClick}}
+            onClick={handleCornerClick}
             >
-                
-
+            <div className='corner-fold'>
+              <span className='corner-hint'>← Letter</span>
+                </div>    
+              </div>
             </div>
         </div> 
-    )
-}
+
+        {/* Swipe hint for mobile */}
+        <div className='swipe-hint'>
+            {direction === 'ltr' ? '← Swipe to flip →' : '→ Swipe to flip ←'}
+        </div>
+      </div>  
+    );
+};
+
+export default FlipLetter;
