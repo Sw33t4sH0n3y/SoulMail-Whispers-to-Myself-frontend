@@ -13,6 +13,7 @@ import LetterEdit from './components/LetterEdit/LetterEdit';
 import ProfileSettings from './components/ProfileSettings/ProfileSettings';
 import LetterDetails from './components/LetterDetails/LetterDetails';
 import ReflectionPage from './components/ReflectionPage/ReflectionPage';
+import TestAnimations from './components/TestAnimations/TestAnimations'
 
 import { UserContext } from './contexts/UserContext';
 
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/letters/:id" element={user ? <LetterDetails /> : <Landing />} />
         
         <Route path="/letters/:id/reflection" element={user ? <ReflectionPage /> : <Landing />} />
+        <Route path="/test-animations" element={<TestAnimations />} />
       </Routes>
     </>
   );

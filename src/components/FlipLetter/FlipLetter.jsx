@@ -16,7 +16,7 @@ const FlipLetter = ({ front, back }) => {
         setIsFlipped(!isFlipped);
     };
     const handleCornerClick = (e) => {
-        e.stopPropagtion();
+        e.stopPropagation();
         handleFlip();
     };
     // Touch handlers for swipe
