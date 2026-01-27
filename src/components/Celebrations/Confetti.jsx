@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import './Celebrations.css';
+
 
 const Confetti = ({ duration = 20000 }) => {
     const[particles, setParticles] = useState([]);
@@ -8,14 +10,14 @@ const Confetti = ({ duration = 20000 }) => {
         const colors = [
             '#ff0000', '#00ff00', '#0000ff', '#ffff00',
             '#ff00ff', '#00ffff', '#ffa500', '#ff69b4',
-            '#gold', '#silver'
+            '#ffd700', '#c0c0c0'
         ];
         const newParticles = Array.from({ length: 150 }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             color: colors[Math.floor(Math.random() * colors.length)],
             delay: Math.random() * 5,
-            durtion: 3 + Math.random() * 2,
+            duration: 3 + Math.random() * 2,
             size: 8 + Math.random() * 8,
             rotation: Math.random() * 360
         }));

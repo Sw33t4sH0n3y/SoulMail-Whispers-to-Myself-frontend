@@ -71,6 +71,8 @@ const update = async (letterId, deliveredAt) => {
        headers: getAuthHeaders(),
        body: JSON.stringify({ deliveredAt })
     });
+    console.log(deliveredAt);
+    
     const result = await res.json();
     if (!result.success) {
         throw new Error(extractErrorMessage(result));
@@ -155,7 +157,7 @@ const addGoalReflection = async (letterId, goalId, reflection) => {
     });
     const result = await res.json();
     if (! result.success) {
-        throw new Error(result.error || 'FAiled to add goal reflection');
+        throw new Error(result.error || 'Failed to add goal reflection');
     }
     return result.data;
 };
