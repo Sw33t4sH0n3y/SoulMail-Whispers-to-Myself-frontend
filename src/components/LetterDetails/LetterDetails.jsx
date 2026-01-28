@@ -593,8 +593,9 @@ const LetterDetails = () => {
             <div className="letter-details-wrapper">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
 
-            <div className='letter-with-overlay'>
-                <FlipLetter front={letterFront} back={letterBack} />    
+                {/* Flip Letter Component */}
+                <div className='letter-with-overlay'>
+                <FlipLetter front={letterFront} back={letterBack} />
 
 
                 {/* Drawing Overlay */}
@@ -616,9 +617,6 @@ const LetterDetails = () => {
                     <button onClick={handleDeleteDrawing} className='delete-drawing-btn'>🗑️ Delete Drawing</button>
                     )
                 </div>
-
-                {/* Flip Letter Component */}
-                <FlipLetter front={letterFront} back={letterBack} />
 
                     <div className="letter-actions-section">
                         <button onClick={handleDelete} className="delete-btn-large">
