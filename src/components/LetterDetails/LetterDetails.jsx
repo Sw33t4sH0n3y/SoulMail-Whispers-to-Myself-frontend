@@ -14,17 +14,24 @@ const LetterDetails = () => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
 
+    // Letter State
     const [letter, setLetter] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Celebration State
     const [celebration, setCelebration] = useState(null);
+
+    // Goal State
     const [goalReflections, setGoalReflections] = useState({});
     const [showCarryForward, setShowCarryForward] = useState(null);
     const [availableLetters, setAvailableLetters] = useState([]);
     const [selectedLetter, setSelectedLetter] = useState('');
 
+    // Drawing State
     const [drawingMode, setDrawingMode] = useState(false);
+
+
     const moods = {
         '☺️': { emoji: '☺️', label: 'Happy' },
         '😢': { emoji: '😢', label: 'Sad' },
@@ -41,6 +48,7 @@ const LetterDetails = () => {
         snowy: '❄️'
     };
 
+    // Fetch Letter
     useEffect(() => {
         const fetchLetter = async () => {
             try {
@@ -61,6 +69,7 @@ const LetterDetails = () => {
         }
     }, [user, id]);
 
+    // Fetch available letters for carry forward
     useEffect(() => {
         const fetchAvailableLetters = async () => {
             if (!showCarryForward) return;
@@ -75,6 +84,7 @@ const LetterDetails = () => {
         fetchAvailableLetters();
     }, [showCarryForward, id]);
 
+    // Delete letter handler
     const handleDelete = async () => {
         const confirmDelete = window.confirm('Are you sure you want to delete this letter? This action cannot be undone.');
 
@@ -103,6 +113,7 @@ const LetterDetails = () => {
         }
     };
 
+    // Goal status change handler
     const handleGoalStatusChange = async (goalId, status) => {
         try {
             const updatedLetter = await letterService.updateGoalStatus(id, goalId, { status });
@@ -121,6 +132,7 @@ const LetterDetails = () => {
         }
     };
 
+    // Add goal reflection handler
     const handleAddGoalReflection = async (goalId) => {
         try {
             const reflection = goalReflections[goalId];
@@ -135,6 +147,7 @@ const LetterDetails = () => {
         }
     };
     
+    // Carry forward goal handler
     const handleCarryForward = async (goalId) => {
         try {
             if (!selectedLetter) return;
@@ -149,6 +162,7 @@ const LetterDetails = () => {
         }
     };
 
+    // Close celebration handler
     const handleCelebrationClose = () => {
         setCelebration(null);
     };
@@ -156,7 +170,7 @@ const LetterDetails = () => {
     // Handle Drawing overlay
     const handleSaveOverlay = async (imagedata) => {
         try {
-            const updatedLetter = await letterService.addOverlayDrawing(id, {overlayDrawing: imagedata});
+            const updatedLetter = await letterService.addOverlayDrawing(id, { overlayDrawing: imagedata });
             setLetter(updatedLetter);
             setDrawingMode(false);
         } catch (err) {
@@ -179,6 +193,7 @@ const LetterDetails = () => {
         }
     };
     
+    // Helper Functions
     const getStatusEmoji = (status) => {
         const emojis = {
             pending: '⏳',
@@ -209,6 +224,7 @@ const LetterDetails = () => {
         });
     };
 
+    // loading state
     if (loading) {
         return (
             <div className="page-container">
@@ -223,6 +239,7 @@ const LetterDetails = () => {
         );
     }
 
+    // Error state
     if (error) {
         return (
             <div className="page-container">
@@ -238,6 +255,7 @@ const LetterDetails = () => {
         );
     }
 
+    // Not found State
     if (!letter) {
         return (
             <div className="page-container">
@@ -317,7 +335,7 @@ const LetterDetails = () => {
                 </div>
             </div>
 
-            {/* Display overlay drawing */}
+            {/* Display drawing */}
             {letter.drawing && (
                 <div className='letter-drawing-section'>
                     <h3>Your Drawing</h3>
@@ -325,6 +343,7 @@ const LetterDetails = () => {
                 </div>    
             )}
 
+            {/* Display Overlay Doodle */}
             {letter.overlayDrawing && (
                 <div className='letter-overlay-section'>
                     <h3>Your Annotations</h3>
@@ -333,19 +352,19 @@ const LetterDetails = () => {
             )}
 
             {/* Old Goals Format */}
-                    {(letter.goal1 || letter.goal2 || letter.goal3) && (
-                        <div className="letter-goals-section">
-                            <h3>Goals You Set</h3>
-                            <div className="goals-list-display">
-                                {[letter.goal1, letter.goal2, letter.goal3]
-                                    .filter(goal => goal)
-                                    .map((goal, index) => (
-                                        <div key={index} className="goal-item-display">
-                                            <span>{goal}</span>
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
+            {(letter.goal1 || letter.goal2 || letter.goal3) && (
+                <div className="letter-goals-section">
+                    <h3>Goals You Set</h3>
+                    <div className="goals-list-display">
+                        {[letter.goal1, letter.goal2, letter.goal3]
+                            .filter(goal => goal)
+                            .map((goal, index) => (
+                <div key={index} className="goal-item-display">
+                        <span>{goal}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
                     )}
                     {/* New Goals Array Format */}
                     {letter.goals && letter.goals.length > 0 && (
@@ -365,7 +384,7 @@ const LetterDetails = () => {
                             </div>
                     )}  
 
-                    {/* Carried Forward */}
+                    {/* Carried Forward Info */}
                     {goal.carriedForwardTo && (
                         <p className='carried-forward-info'>➡️ Carried forward to another letter</p>
                     )}
@@ -373,7 +392,7 @@ const LetterDetails = () => {
                         <p className='carried-forward-info'>⬅️ Carried forward from previous letter</p>
                     )}
 
-                    {/* Goal Actions */}
+                    {/* Goal Actions Pending */}
                     {letter.isDelivered && goal.status === 'pending' && (
                         <div className='goal-actions'>
                             <button
@@ -454,6 +473,7 @@ const LetterDetails = () => {
 </div>
     );
 
+    // Back Side - Reflections
     const letterBack = (
         <div className='letter-back-content'>
             <div className='letter-header-section'>
@@ -512,6 +532,10 @@ const LetterDetails = () => {
             <div className="letter-details-wrapper">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
 
+                {/* Flip Letter Component */}
+                <div className='letter-with-overlay'>
+                <FlipLetter front={letterFront} back={letterBack} />
+
 
                 {/* Drawing Overlay */}
                 <DrawingOverlay
@@ -520,7 +544,7 @@ const LetterDetails = () => {
                     onClose={() => setDrawingMode(false)}
                 />
 
-                {/* Draw on Letter Button */}
+                {/* Letter Actions */}
                 <div className='letter-actions-secton'>
                     <button
                         onClick={() => setDrawingMode(true)}
