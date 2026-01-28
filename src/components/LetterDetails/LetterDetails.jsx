@@ -429,7 +429,7 @@ const LetterDetails = () => {
             ))}
         </div>          
     )}
-    <p className='flip-hint'>👇 Flip the page to add or view reflections</p>
+    <p className='flip-hint'>Flip the page to add or view reflections 👉</p>
 </div>
     );
 
@@ -502,7 +502,7 @@ const LetterDetails = () => {
                                 </button>
                             </div>
                         </form>
-                        <p className='flip-hint'>👇 Flip back to read your letter</p>
+                        <p className='flip-hint'>Flip back to read your letter 👉</p>
         </div>
         );
 

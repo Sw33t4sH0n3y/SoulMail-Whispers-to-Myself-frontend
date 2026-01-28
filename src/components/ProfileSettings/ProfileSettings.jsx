@@ -10,10 +10,12 @@ const ProfileSettings = () => {
 
     const [profile, setProfile] = useState({
         name: '',
+        email: '',
         birthday: ''
     });
 
     const [settings, setSettings] = useState({
+        readingDirection: 'ltr',
         celebrationsEnabled: true,
         birthdayOomph: true,
         milestoneOomph: true,
@@ -33,12 +35,14 @@ const ProfileSettings = () => {
 
                 setProfile({
                     name: userData.name || '',
+                    email: userData.email || '',
                     birthday: userData.birthday
                         ? new Date(userData.birthday).toISOString().split('T')[0]
                         : ''
                 });
 
                 setSettings({
+                    readingDirection: userData.settings?.readingDirection || 'ltr',
                     celebrationsEnabled: userData.settings?.celebrationsEnabled ?? true,
                     birthdayOomph: userData.settings?.birthdayOomph ?? true,
                     milestoneOomph: userData.settings?.milestoneOomph ?? true,
@@ -67,6 +71,7 @@ const ProfileSettings = () => {
     const handleToggleAll = () => {
         const newValue = !settings.celebrationsEnabled;
         setSettings({
+            ...settings,
             celebrationsEnabled: newValue,
             birthdayOomph: newValue,
             milestoneOomph: newValue,
@@ -75,6 +80,10 @@ const ProfileSettings = () => {
             goalAccomplishedOomph: newValue,
             streakOomph: newValue
         });
+    };
+
+    const handleDirectionChange = (direction) => {
+        setSettings({ ...settings, readingDirection: direction });
     };
 
     const handleSaveProfile = async (e) => {
@@ -128,6 +137,18 @@ const ProfileSettings = () => {
                             />
                         </div>
 
+                        <div className='form-row'>
+                            <label htmlFor='email'>Email:</label>
+                            <input
+                               type='email'
+                               id='email'
+                               name='email'
+                               value={profile.email}
+                               onChange={handleProfileChange}
+                            />
+                            <p className='field-note'>For account recovery and notifications</p>
+                        </div>
+
                         <div className="form-row birthday-field">
                             <label htmlFor="birthday">Birthday:</label>
                             <input
@@ -143,6 +164,46 @@ const ProfileSettings = () => {
                     </form>
                 </div>
 
+                {/* Reading Direction */}
+                <div className='form-inner-box'>
+                    <h2 className='section-title'>📖 Reading Direction</h2>
+                    <p className='settings-description'>
+                        Choose how pages flip when viewing letters
+                    </p>
+
+                    <div className='direction-options'>
+                        <label className={`direction-option ${settings.readingDirection === 'ltr' ? 'active' : ''}`}>
+                            <input
+                                type='radio'
+                                name='readingDirection'
+                                value='ltr'
+                                checked={settings.readingDirection === 'ltr'}
+                                onChange={() => handleDirectionChange('ltr')}
+                                />
+                                <span className='direction-label'>
+                                    <span className='direction-icon'>📖→</span>
+                                    <span className='direction-text'>Left to Right (LTR)</span>
+                                    <span className='direction-hint'>English, Spanish, French...</span>
+                                </span>
+                        </label>
+
+                        <label className={`direction-option ${settings.readingDirection === 'rtl' ? 'active' : ''}`}>
+                            <input
+                                type='radio'
+                                name='readingDirection'
+                                value='rtl'
+                                checked={settings.readingDirection === 'rtl'}
+                                onChange={() => handleDirectionChange('rtl')}
+                            />
+                            <span className='direction-label'>
+                                <span className='direction-icon'>←📖</span>
+                                <span className='direction-text'>Right to Left (RTL)</span>
+                                <span className='direction-hint'>Arabic, Hebrew, Persian...</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                
                 <div className="form-inner-box">
                     <h2 className="section-title">🎉 Celebration Animations</h2>
                     <p className="settings-description">
