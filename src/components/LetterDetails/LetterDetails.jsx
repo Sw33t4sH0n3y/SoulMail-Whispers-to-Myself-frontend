@@ -7,6 +7,7 @@ import { getCelebrationMessage, CELEBRATION_TYPES } from '../../utils/celebratio
 import * as letterService from '../../services/letterService';
 import './LetterDetails.css';
 import FlipLetter from '../FlipLetter/FlipLetter';
+import DrawingOverlay from '../DrawingOverlay/DrawingOverlay'
 
 const LetterDetails = () => {
     const { id } = useParams();
@@ -24,8 +25,9 @@ const LetterDetails = () => {
     const [goalReflections, setGoalReflections] = useState({});
     const [showCarryForward, setShowCarryForward] = useState(null);
     const [availableLetters, setAvailableLetters] = useState([]);
-    const [selectedLetter, setSelectedLetters] = useState('');
+    const [selectedLetter, setSelectedLetter] = useState('');
 
+    const [drawingMode, setDrawingMode] = useState(false);
     const moods = {
         '☺️': { emoji: '☺️', label: 'Happy' },
         '😢': { emoji: '😢', label: 'Sad' },
@@ -130,7 +132,7 @@ const LetterDetails = () => {
             setLetter(updatedLetter);
 
             if (status === 'accomplished') {
-                const goals = letter.goals?.find(g => g.id === goalId);
+                const goals = letter.goals?.find(g => g._id === goalId);
                 setCelebration({
                     type: CELEBRATION_TYPES.GOAL_ACCOMPLISHED,
                     ...getCelebrationMessage('goalAccomplished', { goalText: goals?.text })
@@ -163,7 +165,7 @@ const LetterDetails = () => {
             const result = await letterService.carryGoalForward(id, goalId, selectedLetter);
             setLetter(result.oldLetter);
             setShowCarryForward(null);
-            setSelectedLetters('');
+            setSelectedLetter('');
         } catch (err) {
             console.log(err);
             setFormError(err.message);
@@ -174,10 +176,36 @@ const LetterDetails = () => {
         setCelebration(null);
     };
 
+    // Handle Drawing overlay
+    const handleSaveOverlay = async (imagedata) => {
+        try {
+            const updatedLetter = await letterService.addOverlayDrawing(id, {overlayDrawing: imagedata});
+            setLetter(updatedLetter);
+            setDrawingMode(false);
+        } catch (err) {
+            console.log(err);
+            setDrawingMode(false);
+        }
+    };
+
+    // Handle delete Drawing
+    const handleDeleteDrawing = async () => {
+        const confirmDelete = window.confirm('Are you sure?')
+        if(!confirmDelete) return;
+
+        try {
+            const updatedLetter = await letterService.deleteDrawing(id);
+            setLetter(updatedLetter);
+        } catch (err) {
+            console.log(err);
+            setFormError('Failed to delete drawing');
+        }
+    };
+    
     const getStatusEmoji = (status) => {
         const emojis = {
             pending: '⏳',
-            completed: '✅',
+            accomplished: '✅',
             inProgress: '🔄',
             abandoned: '🛑',
             carriedForward: '➡️'
@@ -311,6 +339,22 @@ const LetterDetails = () => {
                     {letter.content}
                 </div>
             </div>
+
+            {/* Display overlay drawing */}
+            {letter.drawing && (
+                <div className='letter-drawing-section'>
+                    <h3>Your Drawing</h3>
+                    <img src={letter.drawing} alt='Your drawing' className='letter-drawing-img' />
+                </div>    
+            )}
+
+            {letter.overlayDrawing && (
+                <div className='letter-overlay-section'>
+                    <h3>Your Annotations</h3>
+                    <img src={letter.overlayDrawing} alt='Your annotations' className='letter-overlay-img' />
+                </div>    
+            )}
+
             {/* Old Goals Format */}
                     {(letter.goal1 || letter.goal2 || letter.goal3) && (
                         <div className="letter-goals-section">
@@ -429,7 +473,7 @@ const LetterDetails = () => {
             ))}
         </div>          
     )}
-    <p className='flip-hint'>👇 Flip the page to add or view reflections</p>
+    <p className='flip-hint'>Flip the page to add or view reflections 👉</p>
 </div>
     );
 
@@ -502,7 +546,7 @@ const LetterDetails = () => {
                                 </button>
                             </div>
                         </form>
-                        <p className='flip-hint'>👇 Flip back to read your letter</p>
+                        <p className='flip-hint'>Flip back to read your letter 👉</p>
         </div>
         );
 
@@ -525,6 +569,27 @@ const LetterDetails = () => {
             <div className="letter-details-wrapper">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
 
+
+                {/* Drawing Overlay */}
+                <DrawingOverlay
+                    isActive={drawingMode}
+                    onSave={handleSaveOverlay}
+                    onClose={() => setDrawingMode(false)}
+                    />
+                </div>
+
+                {/* Draw on Letter Button */}
+                <div className='letter-actions-secton'>
+                    <button
+                        onClick={() => setDrawingMode(true)}
+                        className='draw-btn'
+                        disabled={drawingMode}>✏️ Draw on Letter</button>
+
+                    {(letter.drawing || letter.overlayDrawinging)} && (
+                    <button onClick={handleDeleteDrawing} className='delete-drawing-btn'>🗑️ Delete Drawing</button>
+                    )
+                </div>
+
                 {/* Flip Letter Component */}
                 <FlipLetter front={letterFront} back={letterBack} />
 
@@ -534,7 +599,6 @@ const LetterDetails = () => {
                         </button>
                     </div>
                 </div>
-            </div>
     );
 };
 

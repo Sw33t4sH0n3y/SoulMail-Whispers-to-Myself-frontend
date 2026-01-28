@@ -161,6 +161,32 @@ const addGoalReflection = async (letterId, goalId, reflection) => {
     }
     return result.data;
 };
+// POST /letters/:id/overlay-drawing
+const addOverlayDrawing = async (letterId, drawingData) => {
+    const res = await fetch(`{BASE_URL}/${letterId}/overlay-drawing`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(drawingData)
+    });
+    const result = await res.json();
+    if(!result.success) {
+        throw new Error(result.error || 'Failed to save drawing');
+    }
+    return result.data;
+};
+
+// DELETE /letters/:id/drawing
+const deleteDrawing = async (letterId) => {
+    const res = await fetch(`${BASE_URL}/${letterId}/drawing`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+    });
+    const result = await res.json();
+    if(!result.success) {
+        throw new Error(result.error || 'faile to delete drawing');
+    }
+    return result.data;
+};
 
 export {
     index,
@@ -173,5 +199,6 @@ export {
     deleteReflection,
     updateGoalStatus,
     carryGoalForward,
-    addGoalReflection
+    addGoalReflection,
+    deleteDrawing
 };
