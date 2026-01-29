@@ -1,0 +1,100 @@
+.drawing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #f5f1ff;
+    border: 2px solid #9b88c4;
+    border-radius: 15px;
+}
+.drawing-colors {
+    display: flex;
+    gap: 10px;
+}
+.color-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+.color-btn:hover {
+    transform:scale(1.1);
+}
+.color-btn.active {
+    border-color: #333;
+    transform:scale(1.2);
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #7b68a4;
+}
+.drawing-canvas {
+    border: 2px solid #9b88c4;
+    border-radius: 10px;
+    background: white;
+    cursor: crosshair;
+    touch-action: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.drawing-buttons {
+    display: flex;
+    gap: 15px;
+}
+.clear-btn,
+.save-btn {
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+.clear-btn {
+    background: white;
+    color: #7b68a4;
+}
+.clear-btn:hover {
+    background: #f0f0f0;
+}
+.save-btn {
+    background: #7b68a4;
+    color: white;
+}
+.save-btn:hover {
+    background: #6a5893;
+}
+@media (max-width: 768px) {
+    .drawing-container {
+        padding: 15px;
+    }
+    .drawing-canvas {
+        width: 100% !important;
+        max-width: 350px;
+        height: 250px !important;
+    }
+    .color-btn {
+        width: 26px;
+        height: 26px;
+    }
+    .drawing-colors {
+        gap: 8px;
+    }
+    .clear-btn,
+    .save-btn {
+        padding: 8px 18px;
+        font-size: 13px;
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.drawing-container {
+    animation: fadeIn 0.3s ease;
+}
