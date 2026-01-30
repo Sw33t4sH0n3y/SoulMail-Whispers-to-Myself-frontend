@@ -8,7 +8,13 @@ const getUserFromToken = () => {
 
   if (!token) return null;
 
-  return JSON.parse(atob(token.split('.')[1])).payload;
+  try {
+    return JSON.parse(atob(token.split('.')[1])).payload;
+  } catch (error) {
+    console.error('Error parsing token:', error);
+    localStorage.removeItem('token');
+    return null;
+  }
 };
 
 function UserProvider({ children }) {

@@ -1,11 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../../contexts/UserContext';
+import { useState, useEffect } from 'react';
 import NavBar from '../NavBar/NavBar';
 import * as aiService from '../../services/aiService';
 import * as letterService from '../../services/letterService';
 
 const AITestPage = () => {
-  const { user } = useContext(UserContext);
 
   // Affirmation state
   const [affirmation, setAffirmation] = useState('');

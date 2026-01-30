@@ -9,9 +9,17 @@ const getAuthHeaders = () => ({
  * Extract user-friendly error message from API response
  */
 const extractErrorMessage = (result) => {
-    // New structured error format: { error: { message, code, fields } }
+    // Handle structured error format: { error: { message, code, fields } }
     if (result.error && typeof result.error === 'object') {
         return result.error.message || 'An error occurred';
+    }
+    // Handle string error format: { error: "message" }
+    if (result.error && typeof result.error === 'string') {
+        return result.error;
+    }
+    // Handle message at root level: { message: "..." }
+    if (result.message && typeof result.message === 'string') {
+        return result.message;
     }
     return 'An unexpected error occurred';
 };
@@ -40,12 +48,12 @@ const show = async (letterId) => {
     return result.data;
 };
 
-// GET / letters/delivery options
+// GET /letters/delivery-options
 const getDeliveryOptions = async () => {
-    const res = await fetch (`${BASE_URL}/delivery-options`);
+    const res = await fetch(`${BASE_URL}/delivery-options`);
     const result = await res.json();
     if (!result.success) {
-        throw new Error(result.error || 'Failed to fetch delivery options');
+        throw new Error(extractErrorMessage(result));
     }
     return result.data;
 };
@@ -129,7 +137,7 @@ const updateGoalStatus = async (letterId, goalId, statusData) => {
     });
     const result = await res.json();
     if (!result.success) {
-        throw new Error(result.error || 'FAiled to update goal status');
+        throw new Error(extractErrorMessage(result));
     }
     return result.data;
 };
@@ -143,7 +151,7 @@ const carryGoalForward = async (letterId, goalId, newLetterId) => {
     });
     const result = await res.json();
     if (!result.success) {
-        throw new Error(result.error || 'Failed to carry goal forward');
+        throw new Error(extractErrorMessage(result));
     }
     return result.data;
 };
@@ -156,8 +164,8 @@ const addGoalReflection = async (letterId, goalId, reflection) => {
         body: JSON.stringify({ reflection })
     });
     const result = await res.json();
-    if (! result.success) {
-        throw new Error(result.error || 'Failed to add goal reflection');
+    if (!result.success) {
+        throw new Error(extractErrorMessage(result));
     }
     return result.data;
 };
@@ -169,8 +177,8 @@ const addOverlayDrawing = async (letterId, drawingData) => {
         body: JSON.stringify(drawingData)
     });
     const result = await res.json();
-    if(!result.success) {
-        throw new Error(result.error || 'Failed to save drawing');
+    if (!result.success) {
+        throw new Error(extractErrorMessage(result));
     }
     return result.data;
 };
@@ -182,8 +190,8 @@ const deleteDrawing = async (letterId) => {
         headers: getAuthHeaders()
     });
     const result = await res.json();
-    if(!result.success) {
-        throw new Error(result.error || 'faile to delete drawing');
+    if (!result.success) {
+        throw new Error(extractErrorMessage(result));
     }
     return result.data;
 };
