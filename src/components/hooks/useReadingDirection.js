@@ -1,4 +1,4 @@
-import { useState, useEffect  } from "react";
+import { useState } from "react";
 
 /**
  * Detects user's reading direction based on:
@@ -10,50 +10,45 @@ import { useState, useEffect  } from "react";
  */
 
 const useReadingDirection = () => {
-    const [direction, setDirection] = useState('ltr');
+    const detectDirection = () => {
+        const htmlDir = document.documentElement.dir;
+        if(htmlDir === 'rtl' || htmlDir === 'ltr') {
+            return htmlDir;
+        }
 
-    useEffect(() => {
-        const detectDirection = () => {
+        const cssDir = getComputedStyle(document.documentElement).direction;
+        if (cssDir === 'rtl' || cssDir === 'ltr') {
+            return cssDir;
+        }
+        const lang = navigator.language?.toLowerCase() || 'en';
 
-            const htmlDir = document.documentElement.dir;
-            if(htmlDir === 'rtl' || htmlDir === 'ltr') {
-                return htmlDir;
-            }
+        const rtlLanguages = [
+            'ar',
+            'he',
+            'fa',
+            'ur',
+            'yi',
+            'iw',
+            'ps',
+            'sd',
+        ];
 
-            const cssDir = getComputedStyle(document.documentElement).direction;
-            if (cssDir === 'rtl' || cssDir === 'ltr') {
-                return cssDir;
-            }
-            const lang = navigator.language?.toLowerCase() || 'en';
+        const rtlBookLanguages = [
+            'ja',
+            'zh',
+        ];
 
-            const rtlLanguages = [
-                'ar',
-                'he',
-                'fa',
-                'ur',
-                'yi',
-                'iw',
-                'ps',
-                'sd',
-            ];
+        if (rtlLanguages.some(l => lang.startsWith(l))) {
+            return 'rtl';
+        }
 
-            const rtlBookLanguages = [
-                'ja',
-                'zh',
-            ];
-
-            if (rtlLanguages.some(l => lang.startsWith(l))) {
-                return 'rtl';
-            }
-
-            if (rtlBookLanguages.some(l => lang.startsWith(l))) {
-                return 'ltr';
-            }
+        if (rtlBookLanguages.some(l => lang.startsWith(l))) {
             return 'ltr';
-            };
-            
-            setDirection(detectDirection());
-    }, []);
+        }
+        return 'ltr';
+    };
+
+    const [direction] = useState(detectDirection);
 
     return direction;
 };

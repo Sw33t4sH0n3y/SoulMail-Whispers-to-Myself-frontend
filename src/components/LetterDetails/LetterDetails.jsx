@@ -36,13 +36,11 @@ const LetterDetails = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Reflection State
-    const [reflectionInput, setReflectionInput] = useState('');
-    const [submittingReflection, setSubmittingReflection] = useState(false);
-    const [formError, setFormError] = useState(null);
-
     // Celebration State
     const [celebration, setCelebration] = useState(null);
+
+    // Error State (for goal/drawing operations)
+    const [formError, setFormError] = useState(null);
 
     // Goal State
     const [goalReflections, setGoalReflections] = useState({});
@@ -100,26 +98,6 @@ const LetterDetails = () => {
         } catch (err) {
             console.error(err);
             setError('Failed to delete letter.');
-        }
-    };
-
-    // Add reflection handler
-    const handleAddReflection = async (e) => {
-        e.preventDefault();
-        setFormError(null);
-
-        if (!reflectionInput.trim()) return;
-
-        try {
-            setSubmittingReflection(true);
-            const updatedLetter = await letterService.addReflection(id, { reflection: reflectionInput });
-            setLetter(updatedLetter);
-            setReflectionInput('');
-        } catch (err) {
-            console.error(err);
-            setFormError(err.message);
-        } finally {
-            setSubmittingReflection(false);
         }
     };
 
@@ -572,6 +550,12 @@ const LetterDetails = () => {
 
             <div className="letter-details-wrapper">
                 <Link to="/" className="back-link">← Back to Dashboard</Link>
+
+                {formError && (
+                    <div className="form-error-message" onClick={() => setFormError(null)}>
+                        {formError} <span className="dismiss-hint">(click to dismiss)</span>
+                    </div>
+                )}
 
                 <div className='letter-with-overlay'>
                     {/* Fixed: Only rendering FlipLetter once */}

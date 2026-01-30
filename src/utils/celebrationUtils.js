@@ -75,7 +75,7 @@ export const getCelebrationMessage = (type, data = {}) => {
     }
 };
 
-return messages[type] || {title: 'Celebration!', message: 'Greatjob!', duration: 15000 };
+return messages[type] || {title: 'Celebration!', message: 'Great job!', duration: 15000 };
 
 };
 
@@ -85,7 +85,7 @@ export const checkCelebrations = (user, settings) => {
     if(!settings?.celebrationsEnabled) return celebrations;
 
 //  Bday?
-if (!settings?.birthdayOomph && isBirthday(user.birthday)) {
+if (settings?.birthdayOomph && isBirthday(user.birthday)) {
     celebrations.push({
         type: CELEBRATION_TYPES.BIRTHDAY,
         ...getCelebrationMessage('birthday', { name: user.name })
@@ -95,7 +95,7 @@ if (!settings?.birthdayOomph && isBirthday(user.birthday)) {
  if (settings?.anniversaryOomph && isAnniversary(user.createdAt)) {
     celebrations.push({
         type: CELEBRATION_TYPES.ANNIVERSARY,
-        ...getCelebrationMessage('anniversary', { years: getAccountYears(user.creatAt) })
+        ...getCelebrationMessage('anniversary', { years: getAccountYears(user.createdAt) })
     });
  }
 

@@ -4,12 +4,16 @@ import NavBar from '../NavBar/NavBar';
 import * as letterService from '../../services/letterService';
 import { ReflectionPrompt } from '../AI';
 
+const MIN_REFLECTION_LENGTH = 50;
+
 const ReflectionPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [letter, setLetter] = useState(null);
+    const [error, setError] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
     const [reflectionData, setReflectionData] = useState({
-        reflectionText: '',
+        reflection: '',
         goalsProgress: [],
         wantsRedelivery: false,
         redeliveryDate: ''
@@ -39,7 +43,7 @@ const ReflectionPage = () => {
     }, [id]);
 
     const handleReflectionChange = (e) => {
-        setReflectionData({ ...reflectionData, reflectionText: e.target.value });
+        setReflectionData({ ...reflectionData, reflection: e.target.value });
     };
 
     const handleGoalStatusChange = (index, status) => {
@@ -58,12 +62,23 @@ const ReflectionPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
 
+        // Client-side validation
+        if (reflectionData.reflection.length < MIN_REFLECTION_LENGTH) {
+            setError(`Reflection must be at least ${MIN_REFLECTION_LENGTH} characters long. You have ${reflectionData.reflection.length} characters.`);
+            return;
+        }
+
+        setSubmitting(true);
         try {
             await letterService.addReflection(id, reflectionData);
             navigate('/');
         } catch (err) {
             console.error('Error submitting reflection:', err);
+            setError(err.message || 'Failed to submit reflection. Please try again.');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -83,6 +98,14 @@ const ReflectionPage = () => {
                 <p className="reflection-subtitle">Looking back on what you wrote, how do you feel now?</p>
 
                 <form onSubmit={handleSubmit}>
+                    {/* Error Display */}
+                    {error && (
+                        <div className="form-error" onClick={() => setError(null)}>
+                            {error}
+                            <span className="dismiss-hint">(click to dismiss)</span>
+                        </div>
+                    )}
+
                     {/* AI-Generated Reflection Question */}
                     <div className="ai-reflection-prompt">
                         <ReflectionPrompt
@@ -96,13 +119,17 @@ const ReflectionPage = () => {
                     <div className="form-section">
                         <label className="large-label">Your Reflection:</label>
                         <textarea
-                            name="reflectionText"
-                            value={reflectionData.reflectionText}
+                            name="reflection"
+                            value={reflectionData.reflection}
                             onChange={handleReflectionChange}
                             rows="10"
                             placeholder="Write your thoughts and reflections here..."
                             required
+                            minLength={MIN_REFLECTION_LENGTH}
                         />
+                        <div className={`char-count ${reflectionData.reflection.length < MIN_REFLECTION_LENGTH ? 'char-count-warning' : 'char-count-ok'}`}>
+                            {reflectionData.reflection.length} / {MIN_REFLECTION_LENGTH} characters minimum
+                        </div>
                     </div>
 
                     {/* Goals Progress - only show if letter has goals */}
@@ -198,7 +225,13 @@ const ReflectionPage = () => {
 
                     {/* Submit and Cancel */}
                     <div className="reflection-actions">
-                        <button type="submit" className="submit-btn">Submit Reflection</button>
+                        <button
+                            type="submit"
+                            className="submit-btn"
+                            disabled={submitting || reflectionData.reflection.length < MIN_REFLECTION_LENGTH}
+                        >
+                            {submitting ? 'Submitting...' : 'Submit Reflection'}
+                        </button>
                         <div className="cancel-link">
                             <a onClick={() => navigate('/')}>Cancel and return to Dashboard</a>
                         </div>

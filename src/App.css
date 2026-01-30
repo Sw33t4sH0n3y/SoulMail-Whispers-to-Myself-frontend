@@ -157,6 +157,46 @@ body {
   font-weight: bold;
 }
 
+.form-error {
+  background: #ffebee;
+  border: 2px solid #ef5350;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  color: #c62828;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.form-error:hover {
+  opacity: 0.9;
+}
+
+.form-error .dismiss-hint,
+.form-error-message .dismiss-hint {
+  font-size: 12px;
+  color: #999;
+  margin-left: 10px;
+}
+
+.char-count {
+  margin-top: 8px;
+  font-size: 14px;
+  text-align: right;
+}
+
+.char-count-warning {
+  color: #e65100;
+}
+
+.char-count-ok {
+  color: #2e7d32;
+}
+
 /* Shared form containers and wrappers */
 .form-box,
 .form-inner-box {

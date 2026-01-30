@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import useWritingPrompts from './hooks/useWritingPrompts';
 
 /**
@@ -42,16 +42,16 @@ const WritingPrompts = ({
   children = null,
 }) => {
   const { prompts, loading, error, fetch } = useWritingPrompts();
-
-  const fetchOptions = { mood, theme, count };
+  const hasFetchedRef = useRef(false);
 
   useEffect(() => {
-    if (autoFetch) {
-      fetch(fetchOptions).then((result) => {
+    if (autoFetch && !hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      fetch({ mood, theme, count }).then((result) => {
         if (result?.length && onLoad) onLoad(result);
       });
     }
-  }, [autoFetch]);
+  }, [autoFetch, fetch, mood, theme, count, onLoad]);
 
   useEffect(() => {
     if (error && onError) onError(error);

@@ -18,7 +18,7 @@ const DrawingCanvas = ({ onSave }) => {
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        ctx.fillstyle = '#ffffff';
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }, []);
 
@@ -67,12 +67,12 @@ const DrawingCanvas = ({ onSave }) => {
     const handleClear = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        ctx.fillstyle = '#ffffff';
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
 
     const handleSave = () => {
-        const imageData = canvasRef.current.toDateURL('image/png');
+        const imageData = canvasRef.current.toDataURL('image/png');
         if (onSave) onSave(imageData);
     };
 
@@ -107,7 +107,7 @@ const DrawingCanvas = ({ onSave }) => {
             {/* Buttons */}
             <div className='drawing-buttons'>
                 <button onClick={handleClear} className='clear-btn'>Clear</button>
-                <button onClick={handleClear} className='save-btn'>Save</button>
+                <button onClick={handleSave} className='save-btn'>Save</button>
                 
             </div>
         </div>

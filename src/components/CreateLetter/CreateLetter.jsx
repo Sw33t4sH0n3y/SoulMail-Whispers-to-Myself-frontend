@@ -25,7 +25,7 @@ const CreateLetter = () => {
         temperature: '',
         location: '',
         currentSong: '',
-        topHeadline: '',
+        topHeadLine: '',
         deliveredAt: '',
         deliveryInterval: '',
         goals: []
@@ -34,6 +34,13 @@ const CreateLetter = () => {
     const [goalInput, setGoalInput] = useState('');
     const [showPrompts, setShowPrompts] = useState(false);
     const { prompts, loading: promptsLoading, fetch: fetchPrompts } = useWritingPrompts();
+
+    // Minimum date for custom delivery (1 week from today)
+    const minDeliveryDate = (() => {
+        const date = new Date();
+        date.setDate(date.getDate() + 7);
+        return date.toISOString().split('T')[0];
+    })();
 
     // Song search state
     const [songSearchTerm, setSongSearchTerm] = useState('');
@@ -237,11 +244,7 @@ const CreateLetter = () => {
                                             value={formData.deliveredAt}
                                             onChange={handleChange}
                                             className="custom-date-input"
-                                            min={(() => {
-                                                const date = new Date();
-                                                date.setDate(date.getDate() + 7);
-                                                return date.toISOString().split('T')[0];
-                                            })()}
+                                            min={minDeliveryDate}
                                             required
                                         />
                                     </>
@@ -376,8 +379,8 @@ const CreateLetter = () => {
                             <label>Top Headline:</label>
                             <input
                                 type="text"
-                                name="topHeadline"
-                                value={formData.topHeadline}
+                                name="topHeadLine"
+                                value={formData.topHeadLine}
                                 onChange={handleChange}
                             />
                         </div>
