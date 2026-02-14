@@ -4,6 +4,9 @@ Write letters to your future self. Capture your thoughts, feelings, and goals to
 
 **[Try the Live App](https://endearing-bombolone-fd75f5.netlify.app/)**
 
+
+<img width="1674" height="1120" alt="Screenshot 2026-01-30 at 4 35 36 PM" src="https://github.com/user-attachments/assets/f85dbb42-e489-46b8-9c94-d8de8b4c1e87" />
+
 ## Table of Contents
 
 - [About the Project](#about-the-project)
